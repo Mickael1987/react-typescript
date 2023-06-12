@@ -7,7 +7,13 @@ export default function EstimateForm() {
     register,
     handleSubmit,
     formState: { errors },
+    control,
   } = useForm<Estimate>();
+
+  const { fields, append, remove } = useFieldArray({
+    name: "tasks",
+    control,
+  });
   const onSubmit: SubmitHandler<Estimate> = (data) => console.log(data);
 
   return (
@@ -39,7 +45,7 @@ export default function EstimateForm() {
         {errors.estimateDate && "Please, enter an estimate date"}
       </span>
 
-      <label htmlFor='paymentDate'>Estimate Date</label>
+      <label htmlFor='paymentDate'>Payement Date</label>
       <input
         className={styles.forminput}
         type='date'
@@ -50,7 +56,148 @@ export default function EstimateForm() {
         {errors.paymentDate && "Please, enter a payment date"}
       </span>
 
-      <input type='submit' value='Create Estimate' className={styles.formbutton} />
+      {fields.map((field, index) => {
+        return (
+          <div key={field.id}>
+            <section className={styles.task}>
+              <div>
+                <label htmlFor='taskReference' className={styles.formlabel}>
+                  Item Reference
+                </label>
+                <input
+                  type='text'
+                  id='taskReference'
+                  {...register(`tasks.${index}.reference` as const, {
+                    required: true,
+                  })}
+                  className={styles.forminput}
+                />
+                <div className={styles.formerror}>
+                  {errors?.tasks?.[index]?.reference &&
+                    "Please, enter a reference"}
+                </div>
+              </div>
+
+              <div>
+                <label htmlFor='taskDescription' className={styles.formlabel}>
+                  Item Description
+                </label>
+              </div>
+              <input
+                type='text'
+                id='taskDescription'
+                {...register(`tasks.${index}.description` as const, {
+                  required: true,
+                })}
+                className={styles.forminput}
+              />
+              <div className={styles.formerror}>
+                {errors?.tasks?.[index]?.description &&
+                  "please, enter a description"}
+              </div>
+
+              <div>
+                <label htmlFor='taskQuantity' className={styles.formlabel}>
+                  Item Quantity
+                </label>
+              </div>
+              <input
+                type='number'
+                id='taskQuantity'
+                {...register(`tasks.${index}.quantity` as const, {
+                  required: true,
+                })}
+                className={styles.forminput}
+              />
+              <div className={styles.formerror}>
+                {errors?.tasks?.[index]?.quantity && "please, enter a quantity"}
+              </div>
+
+              <div>
+                <label htmlFor='taskUnitPrice' className={styles.formlabel}>
+                  Item Unit Price
+                </label>
+              </div>
+              <input
+                type='text'
+                id='taskUnitPrice'
+                {...register(`tasks.${index}.unitPrice` as const, {
+                  required: true,
+                })}
+                className={styles.forminput}
+              />
+              <div className={styles.formerror}>
+                {errors?.tasks?.[index]?.unitPrice &&
+                  "please, enter a unit price"}
+              </div>
+
+              <div>
+                <label htmlFor='taskVAT' className={styles.formlabel}>
+                  VAT (in %)
+                </label>
+                <input
+                  type='text'
+                  id='taskVAT'
+                  {...register(`tasks.${index}.vat` as const, {
+                    required: true,
+                  })}
+                  className={styles.forminput}
+                />
+                <div className={styles.formerror}>
+                  {errors?.tasks?.[index]?.vat &&
+                    "please, enter a VAT (WITHOUT %"}
+                </div>
+              </div>
+
+              <div>
+                <label htmlFor='taskDeposit' className={styles.formlabel}>
+                  Deposit
+                </label>
+                <input
+                  type='text'
+                  id='taskDeposit'
+                  {...register(`tasks.${index}.deposit` as const, {
+                    required: true,
+                  })}
+                  className={styles.forminput}
+                />
+                <div className={styles.formerror}>
+                  {errors?.tasks?.[index]?.deposit &&
+                    "please, enter the deposit amount"}
+                </div>
+              </div>
+              <button
+                type='button'
+                onClick={() => {
+                  remove(index);
+                }} className={styles.delete}
+              >Delete</button>
+            </section>
+          </div>
+        );
+      })}
+      <button
+        type='button'
+        onClick={() => {
+          append({
+            reference: "12345",
+            description: "Describe",
+            quantity: 1,
+            unitPrice: 0,
+            vat: 20,
+            deposit: 0,
+          });
+        }}
+        className={styles.formbutton}
+      >
+        Add Item
+      </button>
+
+      <input
+        type='submit'
+        value='Create Estimate'
+        className={styles.formbutton}
+      />
     </form>
   );
 }
