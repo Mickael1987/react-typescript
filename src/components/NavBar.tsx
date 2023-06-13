@@ -6,6 +6,7 @@ export default function NavBar() {
 		<NavLink to="/">Home</NavLink>
 		<NavLink to="/new-estimate">New Estimate</NavLink>
 		<NavLink to="/new-receipt">New Receipt</NavLink>
+		<NavLink to="/my-estimates">My Estimates</NavLink>
 		<NavLink to="/pricing">Pricing</NavLink>
 	</nav>
   )
