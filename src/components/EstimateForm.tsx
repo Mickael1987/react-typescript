@@ -25,6 +25,16 @@ export default function EstimateForm({ onEstimateCreate }: estimateFormProps) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
+      <label htmlFor='estimateTitle' className={styles.formlabel}>Estimate Title</label>
+      <input
+        {...register("title", { required: true })}
+        id='estimateTitle'
+		placeholder="Estimate Title"
+        className={styles.forminput}
+      />
+      <span className={styles.formerror}>
+        {errors.title && "Please, enter an estimate title"}
+      </span>
       <label htmlFor='estimateNumber' className={styles.formlabel}>
         Estimate Number
       </label>
